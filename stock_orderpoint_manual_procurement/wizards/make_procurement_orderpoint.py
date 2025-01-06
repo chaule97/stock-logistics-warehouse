@@ -1,7 +1,7 @@
 # Copyright 2016-20 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 
@@ -37,13 +37,13 @@ class MakeProcurementOrderpoint(models.TransientModel):
             view_id = self.env.ref(
                 "stock_orderpoint_manual_procurement.view_make_procure_without_security"
             ).id  # noqa
-        return super(MakeProcurementOrderpoint, self).fields_view_get(
+        return super().fields_view_get(
             view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
         )
 
     @api.model
     def default_get(self, fields):
-        res = super(MakeProcurementOrderpoint, self).default_get(fields)
+        res = super().default_get(fields)
         orderpoint_obj = self.env["stock.warehouse.orderpoint"]
         orderpoint_ids = self.env.context["active_ids"] or []
         active_model = self.env.context["active_model"]
@@ -67,9 +67,13 @@ class MakeProcurementOrderpoint(models.TransientModel):
         procurements = []
         for item in self.item_ids:
             if not item.qty:
-                raise ValidationError(_("Quantity must be positive."))
+                raise ValidationError(self.env._("Quantity must be positive."))
             if not item.orderpoint_id:
-                raise ValidationError(_("No reordering rule found!"))
+                raise ValidationError(self.env._("No reordering rule found!"))
+            if item.uom_id and item.uom_id.rounding <= 0:
+                raise ValidationError(
+                    self.env._("Unit of measure rounding must be positive")
+                )
             values = item.orderpoint_id._prepare_procurement_values()
             values["date_planned"] = item.date_planned
             procurements.append(
@@ -114,15 +118,9 @@ class MakeProcurementOrderpointItem(models.TransientModel):
         comodel_name="stock.warehouse.orderpoint",
         readonly=False,
     )
-    product_id = fields.Many2one(
-        string="Product", comodel_name="product.product", readonly=True
-    )
-    warehouse_id = fields.Many2one(
-        string="Warehouse", comodel_name="stock.warehouse", readonly=True
-    )
-    location_id = fields.Many2one(
-        string="Location", comodel_name="stock.location", readonly=True
-    )
+    product_id = fields.Many2one(string="Product", comodel_name="product.product")
+    warehouse_id = fields.Many2one(string="Warehouse", comodel_name="stock.warehouse")
+    location_id = fields.Many2one(string="Location", comodel_name="stock.location")
 
     @api.onchange("uom_id")
     def onchange_uom_id(self):

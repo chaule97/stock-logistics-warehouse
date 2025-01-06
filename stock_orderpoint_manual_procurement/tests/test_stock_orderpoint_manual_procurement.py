@@ -10,7 +10,7 @@ from odoo.tests import TransactionCase
 
 class TestStockWarehouseOrderpoint(TransactionCase):
     def setUp(self):
-        super(TestStockWarehouseOrderpoint, self).setUp()
+        super().setUp()
 
         # Refs
         self.group_stock_manager = self.env.ref("stock.group_stock_manager")
@@ -48,7 +48,7 @@ class TestStockWarehouseOrderpoint(TransactionCase):
         # Create vendor and supplier info
         test_seller = self.env["res.partner"].create({"name": "Test seller"})
         self.vendor = self.env["product.supplierinfo"].create(
-            {"name": test_seller.id, "price": 8.0}
+            {"partner_id": test_seller.id, "price": 8.0}
         )
 
         # Create Product category and Product
@@ -89,7 +89,8 @@ class TestStockWarehouseOrderpoint(TransactionCase):
             {
                 "name": "Test Product",
                 "categ_id": self.product_ctg.id,
-                "type": "product",
+                "type": "consu",
+                "is_storable": True,
                 "uom_id": self.product_uom.id,
                 "variant_seller_ids": [(6, 0, [self.vendor.id])],
             }

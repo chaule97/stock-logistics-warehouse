@@ -84,12 +84,13 @@ Contributors
 -  `Trobz <https://trobz.com>`__:
 
    -  Dung Tran <dungtd@trobz.com>
+   -  Chau Le <chaulb@trobz.com>
 
 Other credits
 -------------
 
-The migration of this module from 13.0 to 14.0 was financially supported
-by Camptocamp
+The migration of this module from 13.0 to 14.0 and 15.0 to 18.0 was
+financially supported by Camptocamp
 
 Maintainers
 -----------

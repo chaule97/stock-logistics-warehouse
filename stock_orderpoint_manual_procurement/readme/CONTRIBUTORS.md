@@ -5,3 +5,4 @@
 - Joan Sisquella Andrés \<<joan.sisquella@forgeflow.com>\>
 - [Trobz](https://trobz.com):
   - Dung Tran \<<dungtd@trobz.com>\>
+  - Chau Le \<<chaulb@trobz.com>\>
